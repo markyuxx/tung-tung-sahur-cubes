@@ -616,5 +616,5 @@ sahurPhotos.forEach(photo => {
 grid = createGrid();
 current = randomPiece();
 nextPiece = randomPiece();
-draw();
+resetGame();
 requestAnimationFrame(tick);
