@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Tung Tung Tung Sahur">
+  <rect width="512" height="512" fill="#020202"/>
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="-9" dy="12" stdDeviation="0" flood-color="#242424" flood-opacity="1"/>
+      <feDropShadow dx="0" dy="6" stdDeviation="9" flood-color="#000" flood-opacity=".8"/>
+    </filter>
+    <linearGradient id="wood" x1="0" x2="1">
+      <stop offset="0" stop-color="#5b2b12"/>
+      <stop offset=".16" stop-color="#d28732"/>
+      <stop offset=".36" stop-color="#ffc764"/>
+      <stop offset=".56" stop-color="#b96d2a"/>
+      <stop offset=".78" stop-color="#7b3b18"/>
+      <stop offset="1" stop-color="#3a1708"/>
+    </linearGradient>
+    <linearGradient id="batWood" x1="0" x2="1">
+      <stop offset="0" stop-color="#52240e"/>
+      <stop offset=".45" stop-color="#d27b22"/>
+      <stop offset="1" stop-color="#321205"/>
+    </linearGradient>
+    <radialGradient id="bigEye" cx="35%" cy="32%" r="68%">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset=".2" stop-color="#fff5dd"/>
+      <stop offset=".36" stop-color="#8f4f21"/>
+      <stop offset=".58" stop-color="#321306"/>
+      <stop offset="1" stop-color="#000"/>
+    </radialGradient>
+  </defs>
+
+  <g transform="translate(34 46) rotate(-4)" filter="url(#shadow)">
+    <text x="0" y="66" font-family="Arial Black, Impact, sans-serif" font-size="72" font-weight="900" fill="#f7f7f2">TUNG</text>
+    <text x="0" y="142" font-family="Arial Black, Impact, sans-serif" font-size="72" font-weight="900" fill="#f7f7f2">TUNG</text>
+    <text x="0" y="218" font-family="Arial Black, Impact, sans-serif" font-size="72" font-weight="900" fill="#f7f7f2">TUNG</text>
+    <text x="-8" y="314" font-family="Arial Black, Impact, sans-serif" font-size="78" font-weight="900" fill="#f7f7f2">SAHUR</text>
+  </g>
+
+  <g transform="translate(316 20)">
+    <ellipse cx="74" cy="462" rx="60" ry="15" fill="#000" opacity=".65"/>
+
+    <path d="M23 182 C13 248 21 336 42 398" fill="none" stroke="#d99752" stroke-width="14" stroke-linecap="round"/>
+    <path d="M121 182 C128 257 120 339 103 398" fill="none" stroke="#d99752" stroke-width="14" stroke-linecap="round"/>
+
+    <path d="M43 396 C20 402 18 425 45 428 C75 429 83 407 63 395 Z" fill="#ffd8a1" stroke="#2b1206" stroke-width="3"/>
+    <path d="M102 396 C79 403 82 427 111 426 C139 424 138 403 120 395 Z" fill="#ffd8a1" stroke="#2b1206" stroke-width="3"/>
+
+    <path d="M30 50 C30 17 112 14 122 50 C136 111 128 251 119 326 C113 377 38 378 29 327 C16 253 16 111 30 50 Z" fill="url(#wood)" stroke="#2b1206" stroke-width="5"/>
+    <path d="M41 48 C61 23 98 28 111 53" fill="none" stroke="#ffe7a4" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+    <path d="M40 150 C60 138 94 138 114 151" fill="none" stroke="#4b1f0b" stroke-width="3" opacity=".42"/>
+    <path d="M38 230 C60 217 96 218 116 232" fill="none" stroke="#4b1f0b" stroke-width="3" opacity=".35"/>
+    <path d="M42 304 C63 292 91 292 112 305" fill="none" stroke="#4b1f0b" stroke-width="3" opacity=".38"/>
+
+    <ellipse cx="58" cy="83" rx="22" ry="28" fill="url(#bigEye)" stroke="#fff4de" stroke-width="4"/>
+    <ellipse cx="98" cy="83" rx="22" ry="28" fill="url(#bigEye)" stroke="#fff4de" stroke-width="4"/>
+    <circle cx="50" cy="73" r="5" fill="#fff"/>
+    <circle cx="90" cy="73" r="5" fill="#fff"/>
+    <circle cx="63" cy="89" r="5" fill="#080302"/>
+    <circle cx="103" cy="89" r="5" fill="#080302"/>
+
+    <path d="M58 127 C71 144 97 142 112 121" fill="none" stroke="#2d1106" stroke-width="6" stroke-linecap="round"/>
+    <path d="M65 130 C77 136 94 133 106 123" fill="none" stroke="#ffe4b3" stroke-width="2.5" opacity=".8"/>
+    <path d="M29 191 C-2 244 -19 319 -25 398" fill="none" stroke="url(#batWood)" stroke-width="22" stroke-linecap="round"/>
+    <path d="M-29 397 C-38 419 -11 427 -2 404" fill="#9a5019" stroke="#2b1206" stroke-width="4"/>
+  </g>
+</svg>

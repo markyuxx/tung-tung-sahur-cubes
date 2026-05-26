@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tung Tung Sahur Cubes</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="game-shell">
+      <section class="stage" aria-label="Tung Tung Sahur Cubes game">
+        <div class="topbar">
+          <div>
+            <h1><span>Tung Tung</span> Sahur Cubes</h1>
+            <p id="status" class="subtitle">Fill the silhouette. You only lose when no cube combination can finish it.</p>
+          </div>
+          <button id="soundToggle" class="icon-btn is-on" type="button" aria-label="Turn sound off" title="Sound">S</button>
+        </div>
+
+        <canvas id="board" width="360" height="648" aria-label="Game board"></canvas>
+
+        <div id="sahurCelebration" class="celebration use-fallback" aria-hidden="true">
+          <div class="sahur-photo-wrap">
+            <img class="sahur-photo" src="assets/tung-tung-sahur.svg" alt="">
+          </div>
+          <div class="sahur-character fallback-character">
+            <span class="bat"></span>
+            <div class="sahur-log">
+              <span class="eye left"></span>
+              <span class="eye right"></span>
+              <span class="smile"></span>
+            </div>
+            <div class="sahur-feet">
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+          <strong>TUNG TUNG SAHUR!</strong>
+        </div>
+
+        <div id="lostCelebration" class="celebration lost use-fallback" aria-hidden="true">
+          <div class="sahur-photo-wrap crying">
+            <img class="sahur-photo" src="assets/tung-tung-sahur.svg" alt="">
+            <span class="photo-tear left"></span>
+            <span class="photo-tear right"></span>
+          </div>
+          <div class="sahur-character crying fallback-character">
+            <span class="bat"></span>
+            <div class="sahur-log">
+              <span class="eye left"></span>
+              <span class="eye right"></span>
+              <span class="tear left"></span>
+              <span class="tear right"></span>
+              <span class="frown"></span>
+            </div>
+            <div class="sahur-feet">
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+          <strong>YOU LOST</strong>
+        </div>
+
+        <div class="touch-controls" aria-label="Touch controls">
+          <button type="button" data-action="left" aria-label="Move left">&lt;</button>
+          <button type="button" data-action="rotate" aria-label="Rotate">R</button>
+          <button type="button" data-action="right" aria-label="Move right">&gt;</button>
+          <button type="button" data-action="drop" aria-label="Hard drop">V</button>
+        </div>
+      </section>
+
+      <aside class="side-panel">
+        <div class="stat-row">
+          <span>Sahurs</span>
+          <strong id="score">0</strong>
+        </div>
+        <div class="stat-row">
+          <span>Cubes</span>
+          <strong id="lines">0</strong>
+        </div>
+        <div class="stat-row">
+          <span>Combo</span>
+          <strong id="combo">0</strong>
+        </div>
+        <div class="stat-row">
+          <span>Time</span>
+          <strong id="time">10:00</strong>
+        </div>
+
+        <div class="preview-box">
+          <span>Next</span>
+          <canvas id="next" width="120" height="120" aria-label="Next piece"></canvas>
+        </div>
+
+        <details class="how-to">
+          <summary>How to play</summary>
+          <div class="how-to-body">
+            <p>Fill every glowing square in the Tung Tung Sahur silhouette.</p>
+            <p>Extra cubes are allowed, but you lose when no future piece combination can finish the target.</p>
+            <dl>
+              <div><dt>Move</dt><dd>Arrow keys / A D</dd></div>
+              <div><dt>Rotate</dt><dd>Up / W / Space</dd></div>
+              <div><dt>Drop</dt><dd>Enter</dd></div>
+              <div><dt>Pause</dt><dd>P</dd></div>
+              <div><dt>Music</dt><dd>M / Sound button</dd></div>
+            </dl>
+          </div>
+        </details>
+
+        <button id="startBtn" class="primary-btn" type="button">Start</button>
+        <button id="previewWinBtn" class="secondary-btn" type="button">Preview Win</button>
+        <button id="previewLoseBtn" class="secondary-btn" type="button">Preview Lose</button>
+        <button id="pauseBtn" class="secondary-btn" type="button">Pause</button>
+      </aside>
+    </main>
+
+    <audio id="musicTrack" src="assets/tung-tung-sahur.mp3" loop autoplay preload="auto"></audio>
+    <script src="app.js"></script>
+  </body>
+</html>
