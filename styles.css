@@ -1,5 +1,6 @@
 :root {
   color-scheme: dark;
+  --app-height: 100svh;
   --bg: #101116;
   --panel: #181b22;
   --panel-2: #202530;
@@ -18,9 +19,26 @@
   box-sizing: border-box;
 }
 
+html {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 body {
+  position: fixed;
+  inset: 0;
   margin: 0;
-  min-height: 100vh;
+  width: 100%;
+  height: var(--app-height);
+  min-height: var(--app-height);
+  max-height: var(--app-height);
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
   background:
     radial-gradient(circle at 20% 15%, rgba(255, 191, 85, 0.18), transparent 28%),
     linear-gradient(145deg, #101116 0%, #17131d 45%, #0e1418 100%);
@@ -28,15 +46,18 @@ body {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   display: grid;
   place-items: center;
-  padding: 24px;
+  padding: clamp(8px, 2.2vmin, 24px);
 }
 
 .game-shell {
   width: min(980px, 100%);
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
   display: grid;
-  grid-template-columns: minmax(300px, 420px) minmax(220px, 280px);
+  grid-template-columns: minmax(260px, 420px) minmax(210px, 280px);
   gap: 18px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .stage,
@@ -56,6 +77,10 @@ body {
   padding: 16px;
   position: relative;
   overflow: hidden;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-height: 0;
+  max-height: calc(var(--app-height) - clamp(16px, 4.4vmin, 48px));
 }
 
 .stage::before,
@@ -121,7 +146,14 @@ canvas {
 }
 
 #board {
-  width: 100%;
+  width: min(100%, calc((var(--app-height) - 190px) * 10 / 18));
+  max-width: 100%;
+  height: auto;
+  max-height: calc(var(--app-height) - 190px);
+  justify-self: center;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
   aspect-ratio: 10 / 18;
   background:
     radial-gradient(circle at 50% 18%, rgba(255, 191, 85, 0.1), transparent 30%),
@@ -408,6 +440,8 @@ canvas {
   padding: 16px;
   display: grid;
   gap: 12px;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .stat-row {
@@ -621,23 +655,88 @@ button:active {
 
 @media (max-width: 760px) {
   body {
-    padding: 12px;
-    align-items: start;
+    padding: 8px;
   }
 
   .game-shell {
-    grid-template-columns: 1fr;
-    gap: 12px;
+    grid-template-columns: minmax(0, 1fr) 112px;
+    gap: 8px;
+  }
+
+  .stage {
+    padding: 8px;
+    max-height: calc(var(--app-height) - 16px);
+  }
+
+  .topbar {
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    max-width: 10ch;
+    font-size: clamp(1.05rem, 6vw, 1.65rem);
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    font-size: 0.72rem;
+    max-width: 24ch;
+  }
+
+  #board {
+    width: min(100%, calc((var(--app-height) - 116px) * 10 / 18));
+    max-height: calc(var(--app-height) - 116px);
   }
 
   .side-panel {
-    grid-template-columns: repeat(2, 1fr);
+    padding: 8px;
+    gap: 8px;
+    align-content: start;
+    overflow: hidden;
   }
 
-  .preview-box,
-  .how-to,
+  .stat-row {
+    min-height: 42px;
+    padding: 6px 8px;
+  }
+
+  .stat-row span {
+    font-size: 0.67rem;
+  }
+
+  .stat-row strong {
+    font-size: 1rem;
+  }
+
+  .preview-box {
+    padding: 8px;
+  }
+
+  #next {
+    width: 76px;
+    height: 76px;
+  }
+
   .primary-btn,
   .secondary-btn {
-    grid-column: span 2;
+    min-height: 38px;
+    font-size: 0.72rem;
+  }
+
+  .how-to,
+  #previewWinBtn,
+  #previewLoseBtn {
+    display: none;
+  }
+
+  .touch-controls {
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .touch-controls button {
+    min-height: 40px;
+    font-size: 1rem;
   }
 }

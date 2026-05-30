@@ -69,6 +69,8 @@ let audioCtx = null;
 let soundOn = true;
 let timeLeftMs = 10 * 60 * 1000;
 let musicPrimed = false;
+let restartTimeout = null;
+let boardTouch = null;
 
 function createGrid() {
   return Array.from({ length: ROWS }, () => Array(COLS).fill(null));
@@ -85,12 +87,17 @@ function randomPiece() {
 }
 
 function resetGame() {
+  if (restartTimeout) {
+    clearTimeout(restartTimeout);
+    restartTimeout = null;
+  }
   grid = createGrid();
   score = 0;
   cubes = 0;
   combo = 0;
   timeLeftMs = 10 * 60 * 1000;
   dropInterval = 720;
+  dropTimer = 0;
   current = randomPiece();
   nextPiece = randomPiece();
   running = true;
@@ -313,6 +320,7 @@ function showLostCelebration() {
 }
 
 function loseGame(message) {
+  if (restartTimeout) clearTimeout(restartTimeout);
   running = false;
   paused = false;
   statusEl.textContent = message;
@@ -320,6 +328,10 @@ function loseGame(message) {
   showLostCelebration();
   playGameOver();
   draw();
+  restartTimeout = setTimeout(() => {
+    if (soundOn) restartMusic();
+    resetGame();
+  }, 1400);
 }
 
 function spawnNext() {
@@ -367,6 +379,98 @@ function rotateCurrent() {
     current.shape = rotated;
   }
   draw();
+}
+
+function boardPointFromEvent(event) {
+  const rect = boardCanvas.getBoundingClientRect();
+  return {
+    x: ((event.clientX - rect.left) / rect.width) * COLS,
+    y: ((event.clientY - rect.top) / rect.height) * ROWS
+  };
+}
+
+function pointHitsCurrentPiece(point) {
+  if (!current || !running || paused) return false;
+  const cellX = Math.floor(point.x);
+  const cellY = Math.floor(point.y);
+  return current.shape.some((row, y) => {
+    return row.some((cell, x) => cell && current.x + x === cellX && current.y + y === cellY);
+  });
+}
+
+function moveTowardColumn(targetX) {
+  if (!running || paused || !current) return;
+  const pieceCenter = current.x + current.shape[0].length / 2;
+  const direction = targetX < pieceCenter ? -1 : 1;
+  move(direction);
+}
+
+function startBoardTouch(event) {
+  if (!running || paused) return;
+  event.preventDefault();
+  boardCanvas.setPointerCapture(event.pointerId);
+  const point = boardPointFromEvent(event);
+  boardTouch = {
+    pointerId: event.pointerId,
+    startX: event.clientX,
+    startY: event.clientY,
+    lastX: event.clientX,
+    lastY: event.clientY,
+    startedOnPiece: pointHitsCurrentPiece(point),
+    startedAt: performance.now()
+  };
+}
+
+function moveBoardTouch(event) {
+  if (!boardTouch || boardTouch.pointerId !== event.pointerId) return;
+  event.preventDefault();
+  const rect = boardCanvas.getBoundingClientRect();
+  const cellWidth = rect.width / COLS;
+  const cellHeight = rect.height / ROWS;
+  let dx = event.clientX - boardTouch.lastX;
+  let dy = event.clientY - boardTouch.lastY;
+
+  while (Math.abs(dx) >= cellWidth * 0.58) {
+    const direction = dx > 0 ? 1 : -1;
+    move(direction);
+    boardTouch.lastX += direction * cellWidth * 0.58;
+    dx = event.clientX - boardTouch.lastX;
+  }
+
+  while (dy >= cellHeight * 0.7) {
+    stepDown();
+    boardTouch.lastY += cellHeight * 0.7;
+    dy = event.clientY - boardTouch.lastY;
+  }
+}
+
+function endBoardTouch(event) {
+  if (!boardTouch || boardTouch.pointerId !== event.pointerId) return;
+  event.preventDefault();
+  const elapsed = performance.now() - boardTouch.startedAt;
+  const totalDx = event.clientX - boardTouch.startX;
+  const totalDy = event.clientY - boardTouch.startY;
+  const travel = Math.hypot(totalDx, totalDy);
+  const rect = boardCanvas.getBoundingClientRect();
+  const point = boardPointFromEvent(event);
+
+  if (totalDy > rect.height * 0.14 && Math.abs(totalDy) > Math.abs(totalDx) * 1.45 && elapsed < 420) {
+    hardDrop();
+  } else if (travel < 12 && boardTouch.startedOnPiece && pointHitsCurrentPiece(point)) {
+    rotateCurrent();
+  } else if (travel < 12) {
+    moveTowardColumn(point.x);
+  }
+
+  if (boardCanvas.hasPointerCapture(event.pointerId)) {
+    boardCanvas.releasePointerCapture(event.pointerId);
+  }
+  boardTouch = null;
+}
+
+function cancelBoardTouch(event) {
+  if (!boardTouch || boardTouch.pointerId !== event.pointerId) return;
+  boardTouch = null;
 }
 
 function drawCube(ctx, x, y, size, color) {
@@ -569,8 +673,19 @@ function restartMusic() {
   playMusic();
 }
 
+function preventPageMotion(event) {
+  event.preventDefault();
+}
+
+window.addEventListener("touchmove", preventPageMotion, { passive: false });
+window.addEventListener("wheel", preventPageMotion, { passive: false });
+window.addEventListener("scroll", () => window.scrollTo(0, 0));
+
 document.addEventListener("keydown", event => {
   const key = event.key.toLowerCase();
+  if (["arrowleft", "arrowright", "arrowup", "arrowdown", " ", "pageup", "pagedown", "home", "end"].includes(key)) {
+    event.preventDefault();
+  }
   if (key === "arrowleft" || key === "a") move(-1);
   if (key === "arrowright" || key === "d") move(1);
   if (key === "arrowup" || key === "w" || key === " ") rotateCurrent();
@@ -589,6 +704,11 @@ document.querySelectorAll("[data-action]").forEach(button => {
     if (action === "drop") hardDrop();
   });
 });
+
+boardCanvas.addEventListener("pointerdown", startBoardTouch);
+boardCanvas.addEventListener("pointermove", moveBoardTouch);
+boardCanvas.addEventListener("pointerup", endBoardTouch);
+boardCanvas.addEventListener("pointercancel", cancelBoardTouch);
 
 document.addEventListener("pointerdown", () => {
   if (soundOn && !musicPrimed) playMusic();
